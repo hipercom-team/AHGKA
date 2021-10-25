@@ -1,0 +1,319 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>AHGKA Implementation</title>
+
+ <!--
+  Final word of advice: You can wrap the STYLE element above in IE conditional
+  comments like below to prevent the .HTC being downloaded by IE7+ at all.
+  It's by no means required, and will most likely break IE6 installed alongside
+  IE7 on the same computer (despite working fine in vanilla system-wide IE6).
+ -->
+ <!--[if lte IE 6]><style>/* Activate it here */</style><![endif]-->
+
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	background-color: #284E73;
+}
+body,td,th {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	color: #FFFFFF;
+}
+a:link {
+	color: #8A9BAD;
+}
+a:visited {
+	color: #FFFFFF;
+}
+a:hover {
+	color: #909DAD;
+}
+a:active {
+	color: #284E73;
+}
+h1,h2,h3,h4,h5,h6 {
+	font-weight: bold;
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+h1 {
+	background-image:url(images/heading.png);
+	background-repeat:no-repeat;
+	padding-left: 30px;
+	line-height: 25px;
+	font-size: 24px;
+	color: #FFFFFF;
+}
+h2 {
+	background-image:url(images/heading.png);
+	background-repeat:no-repeat;
+	padding-left: 30px;
+	line-height: 25px;
+	font-size: 18px;
+	color: #8A9BAD;
+}
+h3 {
+	background-image:url(images/heading.png);
+	background-repeat:no-repeat;
+	padding-left: 30px;
+	line-height: 25px;
+	font-size: 18px;
+	color: #284E73;
+}
+blockquote {
+border:#8A9BAD solid 1px;
+padding: 15px;
+width:auto;
+}
+.top {
+	background-image: url(images/top.jpg);
+	background-repeat: no-repeat;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	height: 124px;
+	width: 800px;
+}
+.left {
+	background-image: url(images/left.jpg);
+	background-repeat: no-repeat;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	height: 76px;
+	width: 326px;
+}
+.right {
+	background-image: url(images/right.jpg);
+	background-repeat: no-repeat;
+	margin: 0px;
+	padding: 0px;
+	float: right;
+	height: 76px;
+	width: 474px;
+}
+.header {
+	background-image: url(images/center.jpg);
+	background-repeat: no-repeat;
+	margin: 0px;
+	padding: 0px;
+	float: left;
+	height: 72px;
+	width: 800px;
+}
+.content {
+	float: left;
+	height: auto;
+	width: 720px;
+	padding-left: 45px;
+}
+.left-content {
+	margin: 0px;
+	float: left;
+	height: auto;
+	width: 266px;
+	padding-left: 40px;
+	padding-right: 20px;
+}
+.right-content {
+	margin: 0px;
+	float: right;
+	height: auto;
+	width: 424px;
+	padding-right: 30px;
+	padding-left: 15px;
+}
+.bottom {
+	background-image: url(images/bottom.jpg);
+	background-repeat: no-repeat;
+	float: left;
+	height: 144px;
+	width: 800px;
+	margin: 0px;
+	padding-top: 10px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	padding-left: 0px;
+}
+.left .content {
+	float: left;
+	height: 40px;
+	width: 265px;
+	padding-left: 45px;
+	padding-top: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.right .content {
+	margin: 0px;
+	float: left;
+	height: 40px;
+	width: 425px;
+	padding-top: 20px;
+	padding-left: 20px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+.header .content {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 18px;
+	font-weight: bold;
+	color: #FFFFFF;
+	float: left;
+	height: 40px;
+	width: 700px;
+	padding-left: 45px;
+	padding-top: 15px;
+}
+.themenu{
+width: 265px;
+margin:0;
+padding: 0px; /*width of menu*/
+}
+
+.themenu ul{
+list-style-type: none;
+margin:0px;
+padding-right: 0px;
+
+}
+
+.themenu ul li a{
+background:url(but1.png) no-repeat;
+color: #fff;
+display: block;
+width: auto;
+margin-top:10px;
+height:20px;
+line-height: 11px;
+padding-left:17px;
+text-decoration: none;
+text-align: left;
+border-bottom:#FFFFFF solid 1px;
+
+}
+
+
+* html .themenu ul li a{ /*IE only. Actual menu width minus left padding of LINK (20px) */
+width: 133px;
+}
+
+.themenu ul li a:hover{
+background:url(but1.png) no-repeat;
+color: #fff;
+display: block;
+width: auto;
+margin-top:10px;
+height:20px;
+line-height: 11px;
+padding-left:17px;
+text-decoration: none;
+text-align: left;
+border-bottom:#ccc solid 1px;
+
+}
+
+/* Holly Hack for IE \*/
+* html .themenu ul li { height: 1%; }
+* html .themenu ul li a { height: 1%; }
+/* End */
+-->
+</style>
+
+
+
+</head>
+
+<body>
+<table width="800" border="0" align="center" cellpadding="0" cellspacing="0" background="images/back.jpg" bgcolor="#0E1629">
+  <tr>
+    <td><div class="top"></div>
+    <div class="left">
+      <div class="content">Links</div>
+    </div>
+    <div class="right">
+      <div class="content">AHGKA Implementation</div>
+    </div>
+    <div class="left-content"><div class="themenu">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="AHGKA-1.0.1.tar.gz">AHGKA-1.0.1.tar.gz</a></li>
+            <li><a href="http://www.cecill.info/faq.en.html#differences">
+                CeCILL-B licence info</a></li>
+          </ul>
+          </div></div>
+    <div class="right-content">
+      <p>This software is an implementation of a group-key agreement protocol
+          for ad hoc networks.
+          </p>
+      <ul>
+        </ul>
+      <p></p>
+    </div>
+    <div class="header">
+      <div class="content">Features</div>
+    </div>
+    <div class="content">
+      <h1>AHGKA</h1>
+      <p>
+<blockquote>
+<p>
+This software is an implementation of a GKA system derived
+
+from the one described in 
+"AGDH (Asymmetric Group Diffie Hellman) An Efficient and Dynamic
+Group Key Agreement Protocol for Ad Hoc Networks" from 
+R. Bhaskar, D. Augot, C. Adjih, P. Muhlethaler, S. Boudjit,
+(<a href="http://www.springerlink.com/content/q858q469626q062g/">see there</a>
+and also INRIA RR-5915)
+</p>
+
+
+
+
+<p>
+Network protocol has been enhanced (documented in an internal report), and
+the implementation was mostly written by Rajesh Kumar.
+</p>
+
+
+</blockquote>
+</p>
+      <h1>Distribution</h1>
+      <p>
+<blockquote>
+<ul>
+<li>Lastest version: 
+    <a href="AHGKA-1.0.1.tar.gz">AHGKA-1.0.1.tar.gz</a></li>
+<li>
+It is distributed under the
+<a href="http://www.cecill.info/faq.en.html#differences">CeCILL-B license</a>
+(<a href="http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.html">full
+text</a>)
+</li>
+<li><a href="README">README</a></li>
+</li>
+</ul>
+</blockquote>
+</p>
+      </div>
+    <div class="bottom"> <div align="center">
+      <p>&nbsp;</p>
+      <p><strong>&copy; 2009 INRIA. All Rights Rerserved.</strong></p>
+      <p><a href="http://www.communivoice.com">Web Template Design</a> by Communivoice.com</p>
+    </div></div>
+   </td>
+  </tr>
+</table>
+</body>
+</html>

@@ -1,0 +1,231 @@
+---------------------------------------------------------------------------
+                        AHGKA Implementation
+--------------------------------------------------------------------------
+
+This distribution implements of the GKA system described
+in "AGDH (Asymmetric Group Diffie Hellman) An Efficient and Dynamic
+Group Key Agreement Protocol for Ad Hoc Networks" from 
+R. Bhaskar, D. Augot et al.
+
+The implementation was mostly written by Rajesh Kumar.
+
+It is distributed under the CeCILL-B license; see last section "LICENSE".
+
+---------------------------------------------------------------------------
+
+Compilation
+...........
+
+
+The library OpenSSL is required (package libssl-dev in Ubuntu/Debian
+systems), along the headers and the development libraries.
+A recent version of the library is required (one with EC cryptographic
+primitives) ; openssl version 0.9.8d (and later) is known to work.
+If it is not installed as system library/headers (as it is in Ubuntu
+LTS for instance), then the INCLUDE and SSLLIB variables of the Makefile
+should be modified appropriatly.
+
+Then to compile just:
+  make
+
+---------------------------------------------------------------------------
+
+Executables
+...........
+
+. protocol-test:
+  the main program, starting simulations
+
+. crypto-test:
+  a test of the crypto algorithm (without protocol messages)
+
+. tagdh (initial algorithm concept with Elliptic Curves cryptography)
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+. tagdh is the proof of concept of implementing the algorithms with EC
+  in C with OpenSSL (see tagdh.h). It is run as:
+    ./tagdh
+
+. crypto-test an implementation of the same algorithms with EC, with
+  the cryptographic algorithm implemented in C++. It is run as:
+    ./crypto-test
+
+. protocol-test 
+
+---------------------------------------------------------------------------
+
+Installation:
+-------------
+
+ - ~/AHGKA/src/api-scheduler.h
+ - ~/AHGKA/src/util-general.h
+ - ~/AHGKA/src/gka-simul-base.h
+ - ~/AHGKA/src/gka-simul-base.cc
+ - ~/AHGKA/src/gka-protocol.h
+ - ~/AHGKA/src/gka-protocol.cc
+ - ~/AHGKA/src/gka-crypto.h
+ - ~/AHGKA/src/protocol-test.cc
+ - ~/AHGKA/src/Makefile
+
+Installation Steps:
+-------------------
+1) make
+
+Simulation Running Steps:
+-------------------------
+1) ./protocol_test <parameter1> <parameter2> <parameter3> <parameter4>
+
+ parameter1 - Simulation Scenario 
+              (1-Random distribution of nodes with in the network with 
+                 random movement (* parameter2 = 0), 
+               2-Random distribution of nodes with in any sector 
+                 (each sector consider as a group) nodes are 
+                 moving towards the single destination (like group merge)
+               3-Random distribution of nodes with in any sector and all 
+                 the nodes are instantly merged at a location 
+                 (4 >= parameter2 > 1))
+
+ parameter2 - Number of Groups
+ parameter3 - Number of Nodes
+ parameter4 - Eliptical Curve Type
+              (Default- NID_secp112r1
+               1- NID_secp160r1
+               2- NID_secp224r1
+               3- NID_secp224k1
+               4- NID_secp128r1
+               5- NID_secp192k1
+               1- NID_secp256k1)
+
+sample output result,
+---------------------
+
+Avg. key computation time by the leader Vs # of Group members in (ms):
+----------------------------------------------------------------------
+  1      2      3      4      5      6      7      8      9      10
+----------------------------------------------------------------------
+     4|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     4|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     4|     0|     0|    20|  20.5|    26|     0|     0|     0|     0|
+     4|     0|     0|     0|     0|    28|     0|     0|     0|     0|
+     4|     0|     0|     0|    20|     0|     0|     0|     0|     0|
+     4|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+ 4.001|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     4|     0|    12| 17.33|    20|     0|     0|     0|     0|     0|
+ 4.001|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     4|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+----------------------------------------------------------------------
+
+Avg. key computation time by the member Vs # of Group members in (ms):
+----------------------------------------------------------------------
+  1      2      3      4      5      6      7      8      9      10
+----------------------------------------------------------------------
+     0|     0|     0| 8.001|     4|     4|     0|     0|     0|     0|
+     0|     0|     0|     4| 4.572|     0|     0|     0|     0|     0|
+     0|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     0|     0|     0|     4|     5|     8|     0|     0|     0|     0|
+     0|     0|     0|     0|     0| 4.001|     0|     0|     0|     0|
+     0|     0|     0|     0|     0|     0|     0|     0|     0|     0|
+     0|     0|     0|     0|     4|     4|     0|     0|     0|     0|
+     0|     0|     0|     0|     4|     0|     0|     0|     0|     0|
+     0|     0| 8.001|     4|     4|     4|     0|     0|     0|     0|
+     0|     0|     4|     4|   4.8|     4|     0|     0|     0|     0|
+----------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------
+
+Files
+.....
+
+  tagdh.c - the example of crypto for GKA
+
+  gka-protocol.h - empty example of a node for the protocol
+  gka-protocol.cc 
+  gka-crypto.h
+
+  gka-simul-base.cc \ simulation without MAC layer nor protocol
+  gka-simul-base.h  /
+
+  test-gka-crypto.c
+
+  protocol-test.cc - example of test of the protocol in gka-protocol.h
+
+  api-scheduler.h - the api offered by the Scheduler class
+  scheduler-core.h  \
+  scheduler-core.cc | general internal files
+  util-general.h    /
+
+---------------------------------------------------------------------------
+
+Code reuse in different projects
+................................
+
+The main protocol classes are defined in gka-protocol.h
+
+The main idea is to create an instance of GKANode (which implements
+the protocol), and then arrange for providing other objects for
+the system to operate:
+
+  - A GKAInstance should be created
+
+  - Packets should be passed as IGROUPMessage and IREPLYMessage instances
+
+  - A scheduler (implementing the interface IScheduler)
+
+  - The basic interface for exchanging packets (when a GKANode 
+    sends messages, or when we want to provide it with received messages),
+    is the interface: IpacketExchange.
+
+  - To interface with the external world, GKANode/GKAInstance will:
+    . call methods from an object with the GKASimul interface
+    . this should probably changed manually in the GKANode/GKAInstance
+      definitions
+
+
+The cryptology part may also be used independantly
+
+---------------------------------------------------------------------------
+
+LICENSE
+.......
+
+This code is distributed under the CeCILL-B license (see 
+Licence_CeCILL-B_V1-en.txt / Licence_CeCILL-B_V1-fr.txt,
+and http://www.cecill.info/ for a description of the licences)
+
+Copyright INRIA, 2006-2009
+
+Contact: Cedric.Adjih@inria.fr
+
+This software is a computer program whose purpose is to implement
+a group key aggrement protocol.
+
+
+This software is governed by the CeCILL-B license under French law and
+abiding by the rules of distribution of free software.  You can  use, 
+modify and/ or redistribute the software under the terms of the CeCILL-B
+license as circulated by CEA, CNRS and INRIA at the following URL
+"http://www.cecill.info". 
+
+As a counterpart to the access to the source code and  rights to copy,
+modify and redistribute granted by the license, users are provided only
+with a limited warranty  and the software's author,  the holder of the
+economic rights,  and the successive licensors  have only  limited
+liability. 
+
+In this respect, the user's attention is drawn to the risks associated
+with loading,  using,  modifying and/or developing or reproducing the
+software by the user in light of its specific status of free software,
+that may mean  that it is complicated to manipulate,  and  that  also
+therefore means  that it is reserved for developers  and  experienced
+professionals having in-depth computer knowledge. Users are therefore
+encouraged to load and test the software's suitability as regards their
+requirements in conditions enabling the security of their systems and/or 
+data to be ensured and,  more generally, to use and operate it in the 
+same conditions as regards security. 
+
+The fact that you are presently reading this means that you have had
+knowledge of the CeCILL-B license and that you accept its terms.
+
+---------------------------------------------------------------------------
